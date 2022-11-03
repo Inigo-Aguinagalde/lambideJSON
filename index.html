@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="lambideJsonES.js"></script>
+    <script src="lambideJsonEU.js"></script>
+    <script src="http://10.10.17.201/2daw3/Cookies.js"></script>
+    <script>
+        const responseEU = JSON.parse(jsonEU)
+        const responseES = JSON.parse(jsonES)
+        date = new Date();
+        date.setDate(date.getDate() + 15);
+
+        lenguaje = consultarCookie('idioma')
+
+        if (lenguaje == 'spanish') {
+            let x = consultarCookie('localidad')
+
+            if (x != undefined) {
+                x = x
+
+            } else {
+                x = 'IRUN'
+            }
+
+            result = responseES.filter(function (e) {
+                return e.municipio == x;
+            });
+
+            console.log(result);
+        } else {
+            let x = consultarCookie('localidad')
+            if (x != undefined) {
+                x = x
+
+            } else {
+                x = 'IRUN'
+            }
+           // alert(locality[1])
+            result = responseEU.filter(function (e) {
+                return e.municipio == x;
+            });
+            //alert(result)
+            console.log(result);
+        }
+        //descripción del empleo, la descripción del puesto, la fecha de publicación y la URL
+
+        // responseEU.forEach(obj => {
+        //     Object.entries(obj).forEach(([key, value]) => {
+
+
+        //         console.log(`${key} ${value}`);
+        //     });
+        //     console.log('-------------------');
+        // });
+
+
+        function locadidadES(object) {
+
+
+            document.cookie = `localidad=${object}; expires=${date}`;
+
+            document.write("<table>")
+
+
+            responseES.forEach(obj => {
+                document.write("<tr>")
+                Object.entries(obj).forEach(([key, value]) => {
+                    document.write(`<th> ${key} : ${value}</th>`)
+
+
+                    console.log(`${key} ${value}`);
+                });
+                document.write("</tr>")
+                console.log('-------------------');
+            });
+            document.write("</table>")
+        }
+
+        function idioma(idioma) {
+
+            document.cookie = `idioma = ${idioma}; expires=${date}`
+            location.reload();
+
+        }
+
+    </script>
+</head>
+
+<body>
+    <a href="#español" onclick="idioma('spanish')">ES</a>
+    <a href="#euskera" onclick="idioma('basque')">EU</a>
+    <select name="localidad" id="localidad" onchange="locadidadES(this.value)">
+        <option value="Elige">ELIGE</option>
+        <option value="IRUN">IRUN</option>
+        <option value="ERRENTERIA">RENTERIA</option>
+        <option value="HONDARRIBIA ">HONDARRIBIA</option>
+        <option value="DONOSTI">DONOSTI</option>
+    </select>
+</body>
+
+</html>
