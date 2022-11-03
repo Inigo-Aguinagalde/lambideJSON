@@ -8,78 +8,175 @@
     <title>Document</title>
     <script src="lambideJsonES.js"></script>
     <script src="lambideJsonEU.js"></script>
-    <script src="http://10.10.17.201/2daw3/Cookies.js"></script>
+    <script src="http://185.60.40.210/2daw3/Cookies.js"></script>
     <script>
         const responseEU = JSON.parse(jsonEU)
         const responseES = JSON.parse(jsonES)
         date = new Date();
         date.setDate(date.getDate() + 15);
+        window.onload = pageLoad;
 
-        lenguaje = consultarCookie('idioma')
 
-        if (lenguaje == 'spanish') {
-            let x = consultarCookie('localidad')
-
-            if (x != undefined) {
-                x = x
-
+        function pageLoad() {
+            lenguaje = consultarCookie('idioma')
+            if (lenguaje == undefined) {
+                lenguaje = 'spanish'
+            }
+            if (lenguaje == 'spanish') {
+                document.write(`<a href="#español" onclick="idioma('spanish')">ES</a>
+            <a href = "#euskera" onclick = "idioma('basque')" > EU</a >
+            <select name="localidad" id="localidad" selected='Elije' onchange="locadidadES(this.value) ">
+            <option value="none" selected disabled hidden>ELIGE</option>
+            <option value="IRUN">IRUN</option>
+            <option value="ERRENTERIA">RENTERIA</option>
+            <option value="HONDARRIBIA">HONDARRIBIA</option>
+            <option value="DONOSTIA/SAN SEBASTI�N">DONOSTI</option>
+            </select>`)
             } else {
-                x = 'IRUN'
+                document.write(`<a href="#español" onclick="idioma('spanish')">ES</a>
+            <a href = "#euskera" onclick = "idioma('basque')" > EU</a >
+            <select name="localidad" id="localidad" onchange="locadidadEU(this.value)">
+            <option value="none" selected disabled hidden>AUKERATU</option>
+            <option value="IRUN">IRUN</option>
+            <option value="ERRENTERIA">RENTERIA</option>
+            <option value="HONDARRIBIA">HONDARRIBIA</option>
+            <option value="DONOSTIA/SAN SEBASTI�N">DONOSTI</option>
+            </select>`)
             }
 
-            result = responseES.filter(function (e) {
-                return e.municipio == x;
-            });
+            x = consultarCookie('localidad')
 
-            console.log(result);
-        } else {
-            let x = consultarCookie('localidad')
-            if (x != undefined) {
-                x = x
+            if (lenguaje == 'spanish') {
+
+
+                if (x != undefined) {
+                    x = x
+
+                } else {
+                    x = 'IRUN'
+                }
+
+                document.write("<table border='1' style='border-collapse: collapse'>")
+
+                responseES.filter(function (e) {
+                    if (e.municipio == x) {
+
+                        document.write("<tr>")
+                        document.write(`<th> ${e.desEmpleo}</th>`)
+                        document.write(`<th> ${e.desPuesto}</th>`)
+                        document.write(`<th> ${e.fecPub}</th>`)
+                        document.write(`<th><a href='${e.url}' target='_blank'/>${e.url}</th>`)
+
+                        document.write("<tr>")
+
+                    }
+
+
+                });
+
+                document.write("</table>")
+
 
             } else {
-                x = 'IRUN'
+
+                if (x != undefined) {
+                    x = x
+
+                } else {
+                    x = 'IRUN'
+                }
+
+                document.write("<table border='1' style='border-collapse: collapse'>")
+
+                responseEU.filter(function (e) {
+                    if (e.municipio == x) {
+
+                        document.write("<tr>")
+                        document.write(`<th> ${e.desEmpleo}</th>`)
+                        document.write(`<th> ${e.desPuesto}</th>`)
+                        document.write(`<th> ${e.fecPub}</th>`)
+                        document.write(`<th><a href='${e.url}' target='_blank'/>${e.url}</th>`)
+
+                        document.write("<tr>")
+
+                    }
+
+
+                });
+
+                document.write("</table>")
+
             }
-           // alert(locality[1])
-            result = responseEU.filter(function (e) {
-                return e.municipio == x;
-            });
-            //alert(result)
-            console.log(result);
         }
-        //descripción del empleo, la descripción del puesto, la fecha de publicación y la URL
 
-        // responseEU.forEach(obj => {
-        //     Object.entries(obj).forEach(([key, value]) => {
-
-
-        //         console.log(`${key} ${value}`);
-        //     });
-        //     console.log('-------------------');
-        // });
 
 
         function locadidadES(object) {
+            document.body.innerHTML = '';
+
+            document.write(`<a href="#español" onclick="idioma('spanish')">ES</a>
+            <a href = "#euskera" onclick = "idioma('basque')" > EU</a >
+            <select name="localidad" id="localidad" onchange="locadidadES(this.value) ">
+            <option value="none" selected disabled hidden>ELIGE</option>
+            <option value="IRUN">IRUN</option>
+            <option value="ERRENTERIA">RENTERIA</option>
+            <option value="HONDARRIBIA">HONDARRIBIA</option>
+            <option value="DONOSTIA/SAN SEBASTI�N">DONOSTI</option>
+            </select>`)
+
+
+            document.cookie = `localidad=${object}; expires=${date}`;
+            //location.reload();
+            document.write("<table border='1' style='border-collapse: collapse'>")
+
+            responseES.filter(function (e) {
+                if (e.municipio == object) {
+                    document.write("<tr>")
+                    document.write(`<th> ${e.desEmpleo}</th>`)
+                    document.write(`<th> ${e.desPuesto}</th>`)
+                    document.write(`<th> ${e.fecPub}</th>`)
+                    document.write(`<th><a href='${e.url}' target='_blank'/>${e.url}</th>`)
+                    document.write("<tr>")
+                }
+
+            });
+
+            document.write("</table>")
+        }
+
+        function locadidadEU(object) {
+            document.body.innerHTML = '';
+
+            document.write(`<a href="#español" onclick="idioma('spanish')">ES</a>
+            <a href = "#euskera" onclick = "idioma('basque')" > EU</a >
+            <select name="localidad" id="localidad" onchange="locadidadEU(this.value)">
+            <option value="none" selected disabled hidden>AUKERATU</option>
+            <option value="IRUN">IRUN</option>
+            <option value="ERRENTERIA">RENTERIA</option>
+            <option value="HONDARRIBIA">HONDARRIBIA</option>
+            <option value="DONOSTIA/SAN SEBASTI�N">DONOSTI</option>
+            </select>`)
 
 
             document.cookie = `localidad=${object}; expires=${date}`;
 
-            document.write("<table>")
+            document.write("<table border='1' style='border-collapse: collapse'>")
+            //location.reload();
+            responseEU.filter(function (e) {
+                if (e.municipio == object) {
+                    document.write("<tr>")
+                    document.write(`<th> ${e.desEmpleo}</th>`)
+                    document.write(`<th> ${e.desPuesto}</th>`)
+                    document.write(`<th> ${e.fecPub}</th>`)
+                    document.write(`<th><a href='${e.url}' target='_blank'/>${e.url}</th>`)
+                    document.write("<tr>")
+                }
 
-
-            responseES.forEach(obj => {
-                document.write("<tr>")
-                Object.entries(obj).forEach(([key, value]) => {
-                    document.write(`<th> ${key} : ${value}</th>`)
-
-
-                    console.log(`${key} ${value}`);
-                });
-                document.write("</tr>")
-                console.log('-------------------');
             });
+
             document.write("</table>")
         }
+
 
         function idioma(idioma) {
 
@@ -92,15 +189,7 @@
 </head>
 
 <body>
-    <a href="#español" onclick="idioma('spanish')">ES</a>
-    <a href="#euskera" onclick="idioma('basque')">EU</a>
-    <select name="localidad" id="localidad" onchange="locadidadES(this.value)">
-        <option value="Elige">ELIGE</option>
-        <option value="IRUN">IRUN</option>
-        <option value="ERRENTERIA">RENTERIA</option>
-        <option value="HONDARRIBIA ">HONDARRIBIA</option>
-        <option value="DONOSTI">DONOSTI</option>
-    </select>
+
 </body>
 
 </html>
